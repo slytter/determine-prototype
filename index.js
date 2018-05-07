@@ -27,14 +27,41 @@ app.get('/confirmPrototype/:which', function (req, res) {
     }
 
     loadFile(writeTo).then((r)=>{
-        fs.writeFile(__dirname + writeTo, r + 'Y', function(err) {
+        fs.writeFile(__dirname + writeTo, r + 'X', function(err) {
             if(err) {
                 return res.status(500).send(err);
             }
             console.log("The file was saved!");
-            return res.send('wrote to ' + writeTo + ": " + r + 'Y');
+            return res.send('wrote to ' + writeTo + ". " + (r.length + 1) + " tried this ");
         }); 
     })
+});
+
+app.get('/info', function(req,res){
+    let aAmount = 0;
+    let bAmount = 0; 
+    loadFile('/A.txt').then(text =>{
+        aAmount = text.length
+        loadFile('/B.txt').then(text => {
+            bAmount = text.length;
+            res.send(`
+            <b>Who finished</b> <br>
+            ${aAmount} finished prototype A 
+            <br>
+            ${bAmount} finished prototype B
+            <br><br>
+            <b>Routes: </b> 
+            <br>
+            GET /getPrototype <br>
+            GET /confirmPrototype/:which <br>
+            GET /reset?confirmCode <br>
+            <br>
+            This script is written by schüter <br>
+            <a href="http://slytter.tk">slytter.tk</a><br>
+            <a href="https://github.com/neheren">github</a>
+            `);
+        });
+    });
 });
 
 app.get('/reset', function(req,res){
