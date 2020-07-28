@@ -80,8 +80,8 @@ app.get('/reset', function(req,res){
     }
 })
 
-app.listen(4000)
-console.log("listening on port 4000")
+app.listen(process.env.PORT || 4000)
+console.log("listening on port " + process.env.PORT || 4000)
 
 function loadFile(file){
     return new Promise((resolve, reject)=>{
